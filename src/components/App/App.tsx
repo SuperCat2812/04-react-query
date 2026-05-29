@@ -17,11 +17,12 @@ function App() {
   const [page, setPage] = useState(1);
 
   const movieQuery = useQuery({
-    queryKey: ["movie", { query, page }],
+    queryKey: ["movies", { query, page }],
     queryFn: () => fetchMovies({ query, page }),
     enabled: query !== "",
     placeholderData: keepPreviousData,
   });
+
   const movies = movieQuery.data?.results || [];
   const totalPage = movieQuery.data?.total_pages || 1;
   const { isError, isLoading } = movieQuery;
@@ -61,7 +62,7 @@ function App() {
           setPage={pageSet}
         />
       )}
-      {isLoading ? (
+      {movies.length>0&&isLoading ? (
         <Loader />
       ) : (
         <MovieGrid
