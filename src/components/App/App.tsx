@@ -28,13 +28,13 @@ function App() {
   const { isError, isLoading } = movieQuery;
 
   useEffect(() => {
-    async function fetchMovie() {
+    function fetchMovie() {
       if (query && movieQuery.data && movies.length === 0) {
         toast.error("No movies found for your request.");
       }
     }
     fetchMovie();
-  }, [movieQuery.data, movies, query]);
+  }, [movieQuery.data, movies.length, query]);
 
   const onSubmit = (query: string) => {
     setQuery(query);
@@ -44,7 +44,7 @@ function App() {
   const onSelect = (movieSelect: Movie) => {
     setMovie(movieSelect);
   };
-  const onclose = () => {
+  const onClose = () => {
     setMovie(null);
   };
   const pageSet = (page: number) => {
@@ -62,9 +62,8 @@ function App() {
           setPage={pageSet}
         />
       )}
-      {movies.length>0&&isLoading ? (
-        <Loader />
-      ) : (
+      {isLoading && query && <Loader />}
+      {!isLoading && movies.length > 0 && (
         <MovieGrid
           onSelect={onSelect}
           movies={movies}
@@ -74,7 +73,7 @@ function App() {
       {movie && (
         <MovieModal
           movie={movie}
-          onClose={onclose}
+          onClose={onClose}
         />
       )}
     </>
